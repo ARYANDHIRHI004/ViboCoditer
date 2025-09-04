@@ -8,6 +8,6 @@ export const authRoute: string[] = [
     "/auth/sign-in",
 ]
 
-export const apiAuthPrifix: string = "/api/auth";
+export const apiAuthPrefix: string = "/api/auth";
 
 export const DEFAULT_LOGIN_REDIRECT = "/"
