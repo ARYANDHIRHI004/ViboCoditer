@@ -1,13 +1,25 @@
-import { Button } from "@/components/ui/button";
 
-
-export default function Home() {
-
+import { signIn } from "../../auth"
+ 
+export default function SignIn() {
   return (
-   <div>
-    <Button className="flex gap-2">
-      get started
-    </Button>
-   </div>
-  );
-}
+    <div>
+      <form
+      action={async () => {
+        "use server"
+        await signIn("google")
+      }}
+    >
+      <button type="submit">Signin with Google</button>
+    </form>
+    <form
+      action={async () => {
+        "use server"
+        await signIn("github")
+      }}
+    >
+      <button type="submit">Signin with GitHub</button>
+    </form>
+    </div>
+  )
+} 
