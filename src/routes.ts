@@ -1,6 +1,6 @@
 export const publicRoute: string[] = []	
 
-export const privateRoute: string[] = [
+export const protectedRoute: string[] = [
     "/"
 ]
 
