@@ -1,6 +1,6 @@
 "use server"
 
-import {auth} from "../../../../auth"
+import {auth} from "@/auth"
 import { db } from "@/lib/db"
 
 
@@ -17,10 +17,11 @@ export const getUserById = async (id: string) => {
     return user
   } catch (error) {
     console.log(error)
+    return null
   }
 }
 
-export const getAccountByUseriId = async (userId: string) => {
+export const getAccountByUserId = async (userId: string) => {
   try {
     const account = await db.account.findFirst({
       where: {
@@ -30,6 +31,7 @@ export const getAccountByUseriId = async (userId: string) => {
     return account
   } catch (error) {
     console.log(error)
+    return null
   }
 }
 
@@ -39,6 +41,7 @@ export const currentUser = async () => {
     return user?.user
   } catch (error) {
     console.log(error)
+    return null
   }
 }
 

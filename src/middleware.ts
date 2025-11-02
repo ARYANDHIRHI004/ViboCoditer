@@ -5,6 +5,7 @@ import {
   apiAuthPrefix,
   publicRoute,
   authRoute,
+  protectedRoute
 } from "./routes";
 
 import authConfig from "./auth.config";
@@ -18,6 +19,7 @@ export default auth((req) => {
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoute.includes(nextUrl.pathname);
   const isAuthRoute = authRoute.includes(nextUrl.pathname);
+  const isProtectedRoute = protectedRoute.includes(nextUrl.pathname);
 
   if (isApiAuthRoute) {
     return null;
@@ -25,7 +27,7 @@ export default auth((req) => {
   if (isAuthRoute) {
     if (isloggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-    }
+    } 
     return null;
   }
   if (!isloggedIn && !isPublicRoute) {
@@ -33,3 +35,7 @@ export default auth((req) => {
   }
   return null
 });
+
+export const config = {
+  matcher:["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"]
+};
