@@ -1,16 +1,17 @@
 
+import { Button } from "@/components/ui/button"
 import { signIn } from "../../auth"
  
 export default function SignIn() {
   return (
-    <div>
+    <div className="h-screen flex flex-col items-center justify-center gap-5">
       <form
       action={async () => {
         "use server"
         await signIn("google")
       }}
     >
-      <button type="submit">Signin with Google</button>
+      <Button type="submit">Signin with Google</Button>
     </form>
     <form
       action={async () => {

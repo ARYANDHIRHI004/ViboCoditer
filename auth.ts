@@ -2,10 +2,11 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "./auth.config";
 import { db } from "@/lib/db";
+import { getUserById } from "@/modules/auth/actions";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ user, account }: any) {
       if (!user && !account) return false;
 
       const existingUser = await db.user.findUnique({
@@ -20,7 +21,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             image: user.image!,
 
             accounts: {
-              // @ts-ignore
               create: {
                 provider: account.provider,
                 providerAccountId: account.providerAccountId,
@@ -68,8 +68,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return true;
     },
-    async jwt() {},
-    async session() {},
+    async jwt({ token }: any) {
+      if (!token.sub) return token;
+
+      const existingUser = await getUserById(token.sub);
+      if(!existingUser) return token;
+
+      token.name = existingUser.name;
+      token.email = existingUser.email;
+      token.role = existingUser.role;
+      return token;
+    },
+    async session({ session, token }: any) {
+      if(token.sub && session.sub){
+        session.user.id = token?.sub;
+        session.user.name = token?.name;
+        session.user.image = token?.picture;
+        return session;
+      }
+    },
   },
   secret: process.env.AUTH_SECRET,
   adapter: PrismaAdapter(db),
